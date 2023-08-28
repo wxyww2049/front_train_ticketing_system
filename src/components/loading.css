@@ -1,0 +1,17 @@
+.loadingImg {
+    width: 100px;
+    border-radius: 100%;
+    animation: myrotate 0.4s;
+}
+ 
+@keyframes myrotate
+{
+	from {transform:scale(0);}
+	to {transform:scale(1);}
+}
+
+@-webkit-keyframes myrotate /*Safari and Chrome*/
+{
+	from {transform:scale(0);}
+	to {transform:scale(1);}
+} 

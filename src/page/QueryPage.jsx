@@ -69,8 +69,8 @@ export default function QueryPage() {
             centered
             variant="fullWidth"
           >
-            <Tab value={0} label="单程" />
-            <Tab value={1} label="往返" />
+            <Tab value={0} label="直达" />
+            <Tab value={1} label="中转" />
           </Tabs>
           <QueryDetail value={value} />
         </Paper>

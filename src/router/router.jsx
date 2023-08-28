@@ -5,6 +5,7 @@ import { Box } from "@mui/material";
 import QueryPage from "../page/QueryPage";
 import Orders from "../page/Orders";
 import Profile from "../page/Profile";
+import TicketsPage from "../page/TicketsPage";
 export const BaseRouter = () => (
   <HashRouter>
     <Routes>
@@ -16,6 +17,7 @@ export const BaseRouter = () => (
           </Index>
         }
       />
+      <Route path="/querytickets" element={<TicketsPage />} />
       <Route
         path="order"
         element={
@@ -41,8 +43,7 @@ const Index = (props) => {
     <Box>
       {props.children}
 
-        <NavigateBar value={props.val}></NavigateBar>
-      
+      <NavigateBar value={props.val}></NavigateBar>
     </Box>
   );
 };
