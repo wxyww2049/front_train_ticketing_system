@@ -1772,6 +1772,20 @@
   dependencies:
     "@babel/runtime" "^7.22.10"
 
+"@mui/lab@^5.0.0-alpha.141":
+  version "5.0.0-alpha.141"
+  resolved "https://registry.npmmirror.com/@mui/lab/-/lab-5.0.0-alpha.141.tgz#785125c5a01547fdda3fec7ce232e016b9e4d3a4"
+  integrity sha512-PsW55xX2ieNLldca2hLxL1SYtZgRQv++lj1W/Jyi5Z2MHuFDcdqI7yKGrOzyIWw7ctQrmHa1FTShBiCa2wkEoQ==
+  dependencies:
+    "@babel/runtime" "^7.22.10"
+    "@mui/base" "5.0.0-beta.12"
+    "@mui/system" "^5.14.6"
+    "@mui/types" "^7.2.4"
+    "@mui/utils" "^5.14.6"
+    clsx "^2.0.0"
+    prop-types "^15.8.1"
+    react-is "^18.2.0"
+
 "@mui/material@^5.14.6":
   version "5.14.6"
   resolved "https://registry.npmmirror.com/@mui/material/-/material-5.14.6.tgz#12cbb716a7f70859764be310bb9b2f5ffc0da818"

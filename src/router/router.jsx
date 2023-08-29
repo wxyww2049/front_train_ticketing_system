@@ -6,6 +6,9 @@ import QueryPage from "../page/QueryPage";
 import Orders from "../page/Orders";
 import Profile from "../page/Profile";
 import TicketsPage from "../page/TicketsPage";
+import LoginPage from "../page/LoginPage";
+import BuyTicketPage from "../page/BuyTicketPage";
+import SignupPage from "../page/SignupPage";
 export const BaseRouter = () => (
   <HashRouter>
     <Routes>
@@ -17,7 +20,11 @@ export const BaseRouter = () => (
           </Index>
         }
       />
+      <Route path="/login" element={<LoginPage />} />
+
       <Route path="/querytickets" element={<TicketsPage />} />
+      <Route path="/buyTicket" element={<BuyTicketPage />} />
+      <Route path="signup" element={<SignupPage />} />
       <Route
         path="order"
         element={
@@ -31,6 +38,14 @@ export const BaseRouter = () => (
         element={
           <Index val={3}>
             <Profile />
+          </Index>
+        }
+      />
+      <Route
+        path="*"
+        element={
+          <Index val={1}>
+            <QueryPage />
           </Index>
         }
       />

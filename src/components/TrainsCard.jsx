@@ -1,35 +1,18 @@
-import { Box, Divider, Paper, Typography } from "@mui/material";
+import {
+  Box,
+  Chip,
+  Divider,
+  Icon,
+  IconButton,
+  Paper,
+  Typography,
+} from "@mui/material";
 import moment from "moment/moment";
-import React from "react";
-const dataa = {
-  trainNo: "1c0000D13400",
-  trainClassName: "动车",
-  trainCode: "D134",
-  fromStation: "吉林",
-  fromStationCode: 659,
-  toStation: "方正",
-  toStationCode: 468,
-  startTime: "18:40:00",
-  arriveTime: "21:48:00",
-  wz: 173.5,
-  m: 279.5,
-  o: 173.5,
-  a9: null,
-  a1: null,
-  a4: null,
-  a3: null,
-  cntWz: 0,
-  cntM: 156,
-  cntO: 686,
-  cntA9: 0,
-  cntA1: 0,
-  cntA4: 0,
-  cntA3: 0,
-  start: false,
-  end: false,
-};
+import React, { useContext } from "react";
+import { OrderInfoContext } from "../page/BuyTicketPage";
+
 export default function TrainsCard(props) {
-  const { data } = props;
+  const { data, flag } = props;
   return (
     <Paper
       elevation={3}
@@ -129,16 +112,110 @@ export default function TrainsCard(props) {
         </Box>
       </Box>
       <Divider sx={{ marginTop: 1, marginBottom: "2px" }} />
-      <Box sx={{ height: 30 }}>
-        {data.trainClassName === "高速" || data.trainClassName == "动车" ? (
-          <GaotieCnt value={data} />
-        ) : (
-          ""
-        )}
-      </Box>
+      {flag == 0 && (
+        <Box sx={{ height: 30 }}>
+          {data.trainClassName === "高速" || data.trainClassName == "动车" ? (
+            <GaotieCnt value={data} />
+          ) : (
+            <PutongCnt value={data} />
+          )}
+        </Box>
+      )}
+      {flag == 1 && (
+        <Box sx={{ height: 90 }}>
+          {/* <Box sx={{ display: "flex", flexDirection: "row" }}> */}
+          {/* <DetailCard info={{ name: "一等", cnt: 3, price: "30" }} /> */}
+          {/* </Box> */}
+          <DetailLan info={data} />
+        </Box>
+      )}
     </Paper>
   );
 }
+const DetailLan = ({ info }) => {
+  const { orderInfo, setOrderInfo } = useContext(OrderInfoContext);
+
+  return (
+    <Box
+      sx={{ display: "flex", flexDirection: "row", justifyContent: "center" }}
+    >
+      {info?.cntA9 > 0 && (
+        <DetailCard
+          info={{ type: 5, name: "商务", cnt: info.cntA9, price: info.a9 }}
+        />
+      )}
+      {info?.cntA4 > 0 && (
+        <DetailCard
+          info={{ type: 2, name: "软卧", cnt: info.cntA4, price: info.a4 }}
+        />
+      )}
+      {info?.cntM > 0 && (
+        <DetailCard
+          info={{ type: 3, name: "一等", cnt: info.cntM, price: info.m }}
+        />
+      )}
+      {info?.cntO > 0 && (
+        <DetailCard
+          info={{ type: 4, name: "二等", cnt: info.cntO, price: info.o }}
+        />
+      )}
+      {info?.cntA3 > 0 && (
+        <DetailCard
+          info={{ type: 1, name: "硬卧", cnt: info.cntA3, price: info.a3 }}
+        />
+      )}
+      {info?.cntA1 > 0 && (
+        <DetailCard
+          info={{ type: 0, name: "硬座", cnt: info.cntA1, price: info.a1 }}
+        />
+      )}
+      {info?.cntWz > 0 && (
+        <DetailCard
+          info={{ type: -1, name: "无座", cnt: info.cntWz, price: info.wz }}
+        />
+      )}
+    </Box>
+  );
+};
+const DetailCard = ({ info }) => {
+  const { orderInfo, setOrderInfo } = useContext(OrderInfoContext);
+
+  return (
+    <IconButton
+      onClick={() => {
+        setOrderInfo({ ...orderInfo, seatType: info.type });
+      }}
+    >
+      <Box
+        sx={{
+          border:
+            info?.type === orderInfo.seatType
+              ? "1px solid #007aff"
+              : "1px solid #aca5a5",
+          height: 70,
+          width: 70,
+          borderRadius: "12px",
+          display: "flex",
+          flexDirection: "column",
+          backgroundColor:
+            info?.type === orderInfo.seatType ? "#007aff1c" : "white",
+          justifyContent: "center",
+        }}
+      >
+        <Typography fontWeight={550} fontSize={14}>
+          {info.name}
+        </Typography>
+        <Typography fontWeight={550} fontSize={10}>
+          ￥{info.price}
+        </Typography>
+        <Typography fontWeight={550} fontSize={10}>
+          {info.cnt}张
+        </Typography>
+      </Box>
+    </IconButton>
+  );
+};
+
 const GaotieCnt = (props) => {
   const { value } = props;
   return (
@@ -151,6 +228,25 @@ const GaotieCnt = (props) => {
       </Box>{" "}
       <Box sx={{ width: "25%" }}>
         <Typography fontSize={13}>二等:{value.cntO}张</Typography>
+      </Box>{" "}
+      <Box sx={{ width: "25%" }}>
+        <Typography fontSize={13}>无座:{value.cntWz}张</Typography>
+      </Box>
+    </Box>
+  );
+};
+const PutongCnt = (props) => {
+  const { value } = props;
+  return (
+    <Box sx={{ display: "flex", flexDirection: "row" }}>
+      <Box sx={{ width: "25%" }}>
+        <Typography fontSize={13}>软卧:{value.cntA4}张</Typography>
+      </Box>
+      <Box sx={{ width: "25%" }}>
+        <Typography fontSize={13}>硬卧:{value.cntA3}张</Typography>
+      </Box>{" "}
+      <Box sx={{ width: "25%" }}>
+        <Typography fontSize={13}>硬座:{value.cntA1}张</Typography>
       </Box>{" "}
       <Box sx={{ width: "25%" }}>
         <Typography fontSize={13}>无座:{value.cntWz}张</Typography>

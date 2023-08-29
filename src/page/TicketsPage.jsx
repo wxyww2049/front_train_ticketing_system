@@ -10,6 +10,8 @@ import { QUERYTRAIN } from "../constants/url";
 import TrainsCard from "../components/TrainsCard";
 import Loading from "../components/Loading";
 import FindFail from "../components/FindFail";
+import BackRoute from "../components/BackRoute";
+import Topbar from "../components/Topbar";
 export default function TicketsPage() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -48,47 +50,30 @@ export default function TicketsPage() {
       );
     }
   }, [isSuccess]);
-
+  const buyTicket = (ticket) => {
+    console.log(ticket);
+    if (localStorage.getItem("token") === null) {
+      navigate("/login", {
+        state: { url: "/buyTicket", data: { ...ticket, date: info.date } },
+      });
+      return;
+    } else {
+      navigate("/buyTicket", {
+        state: { data: { ...ticket, date: info.date } },
+      });
+    }
+  };
   return (
     <Box>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          position: "fixed",
-          top: 0,
-          width: "100%",
+      <Topbar>
+        <Box>
+          {info.from.name}
+          {"<>"} {info.to.name}
+        </Box>
+        <Box>{moment(info.date).format("M月D日")}</Box>
 
-          maxWidth: "400px",
-        }}
-      >
-        <Paper
-          sx={{
-            width: "100%",
-            height: 60,
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            backgroundColor: "#007aff",
-            color: "#ffffff",
-          }}
-        >
-          <Box>
-            {info.from.name}
-            {"<>"} {info.to.name}
-          </Box>
-          <Box>{moment(info.date).format("M月D日")}</Box>
-
-          <IconButton
-            onClick={() => {
-              navigate(-1);
-            }}
-            sx={{ position: "fixed" }}
-          >
-            <ArrowBackIosIcon />
-          </IconButton>
-        </Paper>
-      </Box>
+        <BackRoute />
+      </Topbar>
       <Box
         sx={{
           marginTop: "70px",
@@ -97,8 +82,8 @@ export default function TicketsPage() {
         }}
       >
         {tickets?.map((item, index) => (
-          <div>
-            <TrainsCard data={item} />
+          <div onClick={() => buyTicket(item)}>
+            <TrainsCard data={item} flag={0} />
           </div>
         ))}
         {isLoading && <Loading />}

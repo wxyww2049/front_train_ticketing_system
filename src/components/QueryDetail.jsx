@@ -26,7 +26,9 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { styled, alpha } from "@mui/material/styles";
 import { MobileDatePicker } from "@mui/x-date-pickers";
 import { useNavigate } from "react-router-dom";
+import stationSort from "../assets/stationsSort.json";
 import { useSnackbar } from "notistack";
+import { Puller } from "./Puller";
 const lowercase = [
   "a",
   "b",
@@ -90,15 +92,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     //   },
     // },
   },
-}));
-const Puller = styled(Box)(({ theme }) => ({
-  width: 50,
-  height: 6,
-  backgroundColor: grey[300],
-  borderRadius: 3,
-  position: "absolute",
-  top: 8,
-  left: "calc(50% - 25px)",
 }));
 
 export default function QueryDetail(props) {
@@ -306,11 +299,10 @@ const CityForCase = (props) => {
             </Typography>
           )}
           <Box>
-            {stations.map((st) => {
+            {stationSort[cases].map((st) => {
               // console.log(st.areaName.startsWith)
               return (
-                st.name.startsWith(searchHandle) &&
-                st.abbr.startsWith(cases) && (
+                st.name.startsWith(searchHandle) && (
                   <Box>
                     <Box
                       sx={{
