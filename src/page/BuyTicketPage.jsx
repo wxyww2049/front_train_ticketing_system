@@ -5,11 +5,12 @@ import {
   Divider,
   Drawer,
   IconButton,
+  ListItemButton,
   Paper,
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Topbar from "../components/Topbar";
 import TrainsCard from "../components/TrainsCard";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
@@ -18,11 +19,15 @@ import { useMutation } from "react-query";
 import { postQueryFn } from "../query/postQueryFn";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import {
+  BUYTICKETURL,
   GETFELLOWERURL,
   GETORDERSURL,
   REFUNDTICKETURL,
 } from "../constants/url";
 import SelectSeat from "../components/SelectSeat";
+import { useSnackbar } from "notistack";
+import Loading from "../components/Loading";
+import { LoadingButton } from "@mui/lab";
 export const OrderInfoContext = React.createContext();
 
 export default function BuyTicketPage() {
@@ -39,6 +44,22 @@ export default function BuyTicketPage() {
     fellowers: [],
   });
 
+  const {
+    isLoading: orderLoading,
+    isSuccess: orderSuccess,
+    data: orders,
+    isError: orderIsError,
+    error: orderErroError,
+    mutate: orderMutate,
+  } = useMutation(["getorders"], postQueryFn);
+
+  useEffect(() => {
+    if (orderSuccess) {
+      // console.log(orders);
+      document.write(orders.data.message);
+    }
+  }, [orderSuccess]);
+  const navigate = useNavigate();
   const {
     isLoading: fellowLoading,
     isSuccess: fellowSuccess,
@@ -57,7 +78,38 @@ export default function BuyTicketPage() {
   useEffect(() => {
     updFellow();
   }, []);
-
+  const { enqueueSnackbar } = useSnackbar();
+  const submitTicket = () => {
+    if (orderInfo.seatType === null) {
+      enqueueSnackbar("请选择座位类型", {
+        variant: "error",
+      });
+      return;
+    }
+    if (selfellower.filter((item) => item.checked === true).length === 0) {
+      enqueueSnackbar("请添加同行人", {
+        variant: "error",
+      });
+      return;
+    }
+    let payload = {
+      ...orderInfo,
+      fellowers: selfellower
+        .filter((item) => item.checked == true)
+        .map((item) => ({
+          idCode: item.idCode,
+          userName: item.userName,
+          seatPos: item.seatPos,
+        })),
+    };
+    console.log(payload);
+    orderMutate({
+      url: BUYTICKETURL,
+      method: "post",
+      useToken: true,
+      data: payload,
+    });
+  };
   useEffect(() => {
     if (fellowSuccess) {
       console.log(fellowers);
@@ -68,12 +120,12 @@ export default function BuyTicketPage() {
       );
     }
   }, [fellowSuccess]);
-  useEffect(() => {
-    console.log(orderInfo);
-  }, [orderInfo]);
+  // useEffect(() => {
+  //   console.log(orderInfo);
+  // }, [orderInfo]);
   return (
-    <OrderInfoContext.Provider value={{ orderInfo, setOrderInfo }}>
-      <Box sx={{ overflowY: "auto" }}>
+    <Box sx={{ overflowY: "auto" }}>
+      <OrderInfoContext.Provider value={{ orderInfo, setOrderInfo }}>
         <Topbar>
           <Typography>确认订单</Typography>
         </Topbar>
@@ -88,7 +140,7 @@ export default function BuyTicketPage() {
             marginTop: 3,
           }}
         >
-          <Paper sx={{ marginTop: 3, width: "95%" }} elevation={3}>
+          <Paper sx={{ marginTop: 1, width: "95%" }} elevation={3}>
             {selfellower.map((item, index) => {
               if (item.checked) {
                 return (
@@ -105,7 +157,7 @@ export default function BuyTicketPage() {
                           marginLeft: 2,
                         }}
                       >
-                        <Typography variant="h5">{item.userName}</Typography>
+                        <Typography variant="h6">{item.userName}</Typography>
                         <Typography variant="body2">{item.idCode}</Typography>
                       </Box>
                       <Box flex={1}></Box>
@@ -178,6 +230,15 @@ export default function BuyTicketPage() {
             </Paper>
           )}
         </Box>
+        <LoadingButton
+          loadingIndicator="下单中…"
+          loading={orderLoading}
+          variant="contained"
+          onClick={submitTicket}
+          sx={{ width: "90%", marginTop: 3 }}
+        >
+          确定
+        </LoadingButton>
         <Box sx={{ height: "100px" }}></Box>
         <Drawer
           onClose={() => {
@@ -202,9 +263,13 @@ export default function BuyTicketPage() {
               fullWidth
               color="warning"
               variant="outlined"
+              onClick={() => {
+                navigate("/addFellow");
+              }}
             >
               新增同行者
             </Button>
+            {fellowLoading && <Loading />}
             {selfellower.map((item, index) => (
               <Box
                 sx={{
@@ -222,41 +287,42 @@ export default function BuyTicketPage() {
                     width: "100%",
                   }}
                 >
-                  <Box
-                    sx={{
-                      width: "20%",
-                      height: "100%",
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                      alignItems: "center",
+                  <ListItemButton
+                    onClick={() => {
+                      setSelfellower(
+                        selfellower.map((item2, index2) => {
+                          if (index2 === index) {
+                            return { ...item2, checked: !item2.checked };
+                          } else {
+                            return item2;
+                          }
+                        })
+                      );
                     }}
                   >
-                    <Checkbox
-                      checked={item.checked}
-                      onClick={() => {
-                        setSelfellower(
-                          selfellower.map((item2, index2) => {
-                            if (index2 === index) {
-                              return { ...item2, checked: !item2.checked };
-                            } else {
-                              return item2;
-                            }
-                          })
-                        );
+                    <Box
+                      sx={{
+                        width: "20%",
+                        height: "100%",
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
                       }}
-                    />
-                  </Box>
-                  <Box
-                    sx={{
-                      flexDirection: "column",
-                      justifyContent: "space-evenly",
-                      display: "flex",
-                    }}
-                  >
-                    <Typography variant="h5">{item.userName}</Typography>
-                    <Typography variant="body2">{item.idCode}</Typography>
-                  </Box>
+                    >
+                      <Checkbox checked={item.checked} />
+                    </Box>
+                    <Box
+                      sx={{
+                        flexDirection: "column",
+                        justifyContent: "space-evenly",
+                        display: "flex",
+                      }}
+                    >
+                      <Typography variant="h6">{item.userName}</Typography>
+                      <Typography variant="body2">{item.idCode}</Typography>
+                    </Box>
+                  </ListItemButton>
                 </Box>
                 <Divider />
               </Box>
@@ -272,7 +338,7 @@ export default function BuyTicketPage() {
             </Button>
           </Box>
         </Drawer>
-      </Box>
-    </OrderInfoContext.Provider>
+      </OrderInfoContext.Provider>
+    </Box>
   );
 }

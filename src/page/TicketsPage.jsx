@@ -25,7 +25,6 @@ export default function TicketsPage() {
     isSuccess,
   } = useMutation(["ticketblbl"], postQueryFn);
   useEffect(() => {
-    console.log(info);
     ticketsMutate({
       url: QUERYTRAIN,
       params: {
@@ -51,7 +50,6 @@ export default function TicketsPage() {
     }
   }, [isSuccess]);
   const buyTicket = (ticket) => {
-    console.log(ticket);
     if (localStorage.getItem("token") === null) {
       navigate("/login", {
         state: { url: "/buyTicket", data: { ...ticket, date: info.date } },

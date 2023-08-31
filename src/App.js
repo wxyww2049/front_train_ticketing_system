@@ -20,6 +20,8 @@ function App() {
                 maxWidth: "400px",
                 height: "100vh",
                 maxHeight: "100vh",
+                overflowY: "auto",
+                backgroundColor: "#d7d7d747",
               }}
               elevation={3}
             >

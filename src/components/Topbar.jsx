@@ -27,7 +27,7 @@ export default function Topbar(props) {
         }}
       >
         {props.children}
-        <BackRoute />
+        {props?.flag === 0 || <BackRoute />}
       </Paper>
     </Box>
   );

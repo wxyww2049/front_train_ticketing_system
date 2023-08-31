@@ -5,9 +5,6 @@ import WeekendOutlinedIcon from "@mui/icons-material/WeekendOutlined";
 import { Box, IconButton, Typography } from "@mui/material";
 
 export default function SelectSeat(props) {
-  useEffect(() => {
-    console.log(props);
-  });
   return (
     <Box>
       {props.type === 5 && <ShangwuCard props={props} />}
@@ -110,12 +107,12 @@ const ShangwuCard = (props) => {
 };
 const Seat = ({ cases, type }) => {
   return (
-    <Box sx={{ position: "relative", height: "50px", width: "50px" }}>
+    <Box sx={{ position: "relative", height: "55px", width: "55px" }}>
       <Typography
         sx={{
           position: "absolute",
-          top: 13,
-          left: 21,
+          top: 16,
+          left: 26,
           fontWeight: 600,
           fontSize: "13px",
         }}
@@ -124,12 +121,17 @@ const Seat = ({ cases, type }) => {
       </Typography>
       <Box sx={{ position: "absolute" }}>
         <IconButton>
-          {!type && <WeekendOutlinedIcon fontSize="large" />}
+          {!type && (
+            <WeekendOutlinedIcon
+              sx={{ height: "45px", width: "45px" }}
+              fontSize="inherit"
+            />
+          )}
           {type && (
             <WeekendIcon
               color="warning"
-              sx={{ opacity: 0.7 }}
-              fontSize="large"
+              sx={{ opacity: 0.7, height: "45px", width: "45px" }}
+              fontSize="inherit"
             />
           )}
           {/* <Box sx={{ marginTop: "-10px" }}> */}
