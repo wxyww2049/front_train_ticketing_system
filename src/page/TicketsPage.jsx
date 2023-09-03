@@ -57,7 +57,7 @@ export default function TicketsPage() {
       return;
     } else {
       navigate("/buyTicket", {
-        state: { data: { ...ticket, date: info.date } },
+        state: { data: [{ ...ticket, date: info.date }], flag: 1 },
       });
     }
   };

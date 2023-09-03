@@ -43,7 +43,6 @@ export default function Profile() {
             <MyListItem text="同行人管理" url="/manageFellow" />
             <Divider />
             <MyListItem text="本人车票" url="/tickets" />
-            <Divider />
           </List>
         </Paper>
         <Button
@@ -88,7 +87,15 @@ const MyListItem = (props) => {
       <ListItemButton
         onClick={props.click ? () => props.click() : () => navigate(props.url)}
       >
-        <Typography>{props.text}</Typography>
+        <Box
+          sx={{
+            height: 50,
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <Typography>{props.text}</Typography>
+        </Box>
       </ListItemButton>
     </ListItem>
   );

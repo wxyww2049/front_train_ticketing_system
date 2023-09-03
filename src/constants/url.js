@@ -1,4 +1,5 @@
 export const BASEURL = "http://train-server.wxyww.top";
+// export const BASEURL = "http://localhost:8020";
 export const QUERYTRAIN = BASEURL + "/queryTrain";
 export const LOGINURL = BASEURL + "/login";
 export const SIGNUPURL = BASEURL + "/signup";
@@ -10,3 +11,5 @@ export const ADDFELLOWURL = BASEURL + "/addFellow";
 export const GETALLORDERS = BASEURL + "/queryOrder";
 export const CHANGEIDCODE = BASEURL + "/changeIdCode";
 export const DELETEFELLOW = BASEURL + "/deleteFellow";
+export const GETTICKETS = BASEURL + "/queryTicket";
+export const TRANSFERURL = BASEURL + "/queryTransfer";

@@ -32,7 +32,9 @@ export const OrderInfoContext = React.createContext();
 
 export default function BuyTicketPage() {
   const localtion = useLocation();
-  const info = localtion.state.data;
+  const ticketType = localtion.state.flag;
+  const info = localtion.state.data[0];
+  // const [info, setInfo] = useState(localtion.state.data[0]);
   const [openDrwer, setOpenDrwer] = useState(false);
   const [selfellower, setSelfellower] = useState([]);
   const [orderInfo, setOrderInfo] = useState({
@@ -43,6 +45,19 @@ export default function BuyTicketPage() {
     date: info.date,
     fellowers: [],
   });
+  useEffect(() => {
+    // info = localtion.state.data[0];
+    // setInfo(localtion.state.data[0]);
+    let info = localtion.state.data[0];
+    setOrderInfo({
+      trainNo: info.trainNo,
+      fromStationCode: info.fromStationCode,
+      toStationCode: info.toStationCode,
+      seatType: null,
+      date: info.date,
+      fellowers: [],
+    });
+  }, [localtion.state]);
 
   const {
     isLoading: orderLoading,
@@ -55,8 +70,19 @@ export default function BuyTicketPage() {
 
   useEffect(() => {
     if (orderSuccess) {
-      // console.log(orders);
-      document.write(orders.data.message);
+      if (ticketType == 1) document.write(orders.data.message);
+      else {
+        if (localtion.state.data.length == 1) {
+          enqueueSnackbar("下单完成，请前往订单详情页付款", {
+            variant: "success",
+          });
+          navigate("/order");
+        } else {
+          navigate("/buyTicket", {
+            state: { data: [localtion.state.data[1]], flag: 0 },
+          });
+        }
+      }
     }
   }, [orderSuccess]);
   const navigate = useNavigate();
@@ -127,7 +153,13 @@ export default function BuyTicketPage() {
     <Box sx={{ overflowY: "auto" }}>
       <OrderInfoContext.Provider value={{ orderInfo, setOrderInfo }}>
         <Topbar>
-          <Typography>确认订单</Typography>
+          {ticketType == 1 && <Typography>确认订单</Typography>}
+          {ticketType == 0 && localtion.state.data.length == 1 && (
+            <Typography>第二程</Typography>
+          )}
+          {ticketType == 0 && localtion.state.data.length == 2 && (
+            <Typography>第一程</Typography>
+          )}
         </Topbar>
         <Box sx={{ marginTop: 10 }}>
           <TrainsCard data={info} flag={1} />

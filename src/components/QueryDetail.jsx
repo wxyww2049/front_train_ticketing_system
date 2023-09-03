@@ -120,8 +120,11 @@ export default function QueryDetail(props) {
       date: moment(toDate.toString()).format("YYYY-MM-DD"),
       onlyGD: GDonly,
     };
-
-    navigate("/querytickets", { state: info });
+    if (type === 0) {
+      navigate("/querytickets", { state: info });
+    } else {
+      navigate("/queryTransfer", { state: info });
+    }
     // console.log(info);
   };
   return (

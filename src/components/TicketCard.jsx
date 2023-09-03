@@ -108,9 +108,16 @@ export default function TicketCard(props) {
           justifyContent: "space-around",
         }}
       >
-        <Typography fontSize={13}>
-          {data?.tickets[0]?.date ? "发车时间:" + data.tickets[0].date : "  "}
-        </Typography>
+        {data.tickets && (
+          <Typography fontSize={13}>
+            {data?.tickets[0]?.date ? "发车日期:" + data.tickets[0].date : "  "}
+          </Typography>
+        )}
+        {!data.tickets && (
+          <Typography fontSize={13}>
+            {data?.date ? "发车日期:" + data?.date : "  "}
+          </Typography>
+        )}
         <Typography fontSize={13}>车票仅限当日有效</Typography>
       </Box>
     </Paper>

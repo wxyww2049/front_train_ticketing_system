@@ -18,7 +18,7 @@ export default function Topbar(props) {
       <Paper
         sx={{
           width: "100%",
-          height: 60,
+          height: 63,
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",

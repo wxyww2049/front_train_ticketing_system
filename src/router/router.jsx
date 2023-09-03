@@ -14,6 +14,7 @@ import OrderDetail from "../page/OrderDetail";
 import IdCodePage from "../page/IdCodePage";
 import ManageFellow from "../page/ManageFellow";
 import MyTickets from "../page/MyTickets";
+import TransferPage from "../page/TransferPage";
 export const BaseRouter = () => (
   <HashRouter>
     <Routes>
@@ -35,6 +36,7 @@ export const BaseRouter = () => (
       <Route path="/changeIdCode" element={<IdCodePage />} />
       <Route path="/manageFellow" element={<ManageFellow />} />
       <Route path="/tickets" element={<MyTickets />} />
+      <Route path="/queryTransfer" element={<TransferPage />} />
       <Route
         path="order"
         element={
